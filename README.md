@@ -11,8 +11,8 @@
       <th>EdgeTPU</th>
    </tr>
    <tr>
-      <th>Mobilenet</th>
-      <th>Tensorflow</th>
-      <th>✔️</th>
-      <th>❔</th>
+      <td>Mobilenet</td>
+      <td>Tensorflow</td>
+      <td>✔️</td>
+      <td>❔</td>
    </tr>
