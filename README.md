@@ -37,6 +37,10 @@ The table below shows the tested models.
    </tr>
 </table>
 
+Interesante probar con
+- ultralytics
+- torchvision
+- detectores de objetos...
 
 ```bash
 sudo docker run -it --ipc=host --gpus all ultralytics/ultralytics:latest
