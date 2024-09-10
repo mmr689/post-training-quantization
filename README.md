@@ -52,3 +52,9 @@ ultralytics/ultralytics:latest
 cd /workspace
 python yolov8-cls.py
 ```
+
+
+## Files
+
+- model_quantizer_run_example.py: Ejemplo de creación de los diferentes tipos de cuantificación con tensorflow con ua clase que lo gestione
+- Ejemplos particulares from scratch
