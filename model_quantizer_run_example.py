@@ -25,13 +25,27 @@ def load_model(model_name):
         raise ValueError("Unsupported model name. Please choose 'vgg16', 'mobilenet', or 'resnet'.")
 
 # Choose the model name
-model_name = 'mobilenet'  # Change this to 'mobilenet' or 'resnet' to use other models
+model_name = 'vgg16'  # Change this to 'mobilenet' or 'resnet' to use other models
 
 # Load the chosen model
 model = load_model(model_name)
 
+# Define and create the model directory if it doesn't exist
+model_dir = os.path.join("results", model_name)
+os.makedirs(model_dir, exist_ok=True)
+
+# Save the model in HDF5 format
+h5_model_path = os.path.join(model_dir, "{}.h5".format(model_name))
+model.save(h5_model_path)
+
+# Convert the model to TFLite format without quantization
+tflite_model = tf.lite.TFLiteConverter.from_keras_model(model).convert()
+tflite_model_path = os.path.join(model_dir, "{}.tflite".format(model_name))
+with open(tflite_model_path, 'wb') as f:
+    f.write(tflite_model)
+
 # Save the model in TensorFlow SavedModel format
-saved_model_path = "results/{}_tf_saved_model".format(model_name)
+saved_model_path = os.path.join(model_dir, "tf_saved_model")
 tf.saved_model.save(model, saved_model_path)
 
 # Initialize the quantizer with the saved model path

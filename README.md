@@ -4,6 +4,19 @@
 
 The aim of this repository is to learn and understand how [Tensorflow post-training quantization](https://www.tensorflow.org/lite/performance/post_training_quantization) works.
 
+## done
+
+- Genero modelos cuantis de clasificación de TF-
+- Los ejecuto en server
+
+- `model_quantizer_run_example.py` genera modelos normal, tflite i tflite cuantizados de los modelos clasificadores de imagenet.
+- En `examples` hay un código para cada tipo de cuantificación por separado de la manera más raw posible tanto de creaciómo ejecución.
+- `model_quantizer_inference_example.py` Me parece que pretende hacer lo mismo que run `run_inference_tflite.py`
+
+
+
+Por lo tanto solo funciona con la versión dimanica que debe ser FP32. Explorar cómo ejecutar el resto
+
 The table below shows the tested models.
 
 <table>

@@ -46,8 +46,8 @@ def infer_image(model_path, image_path, input_size=(224, 224)):
     return output_data
 
 # Ejemplo de uso
-model_path = "results/mobilenet_tf_saved_model/mobilenet_dynamic_quant.tflite"
-image_path = "assets/cat.png"
+model_path = "results/mobilenet/tf_saved_model/mobilenet_dynamic_quant.tflite"
+image_path = "assets/dog.jpg"
 probabilities = infer_image(model_path, image_path)
 
 import ast
@@ -64,11 +64,11 @@ top_n = 5
 top_n_indices = np.argsort(probabilities)[-top_n:][::-1]
 top_n_indices = top_n_indices.flatten()
 print(top_n_indices)
-print(labels[top_n_indices[0]])
+# print(labels[top_n_indices[0]])
 
-# # Mostrar las etiquetas correspondientes a los índices
-# print("Top {} predicciones:".format(top_n))
-# for idx in top_n_indices:
-#     label = labels[int(idx)]  # Asegúrate de que 'idx' sea un entero
-#     prob = probabilities[int(idx)]
-#     print(f"Clase: {label}, Probabilidad: {prob:.4f}")
+# Mostrar las etiquetas correspondientes a los índices
+print("Top {} predicciones:".format(top_n))
+for idx in top_n_indices:
+    label = labels[int(idx)]  # Asegúrate de que 'idx' sea un entero
+    prob = probabilities[int(idx)]
+    print(f"Clase: {label}, Probabilidad: {prob:.4f}")
