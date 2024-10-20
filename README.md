@@ -13,7 +13,7 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
    - En tiempos vemos que cargar le cuesta más con la edge y eso es coherente pero la inferencia creo la hace en la CPU.
 + Probar en la coral dev board para corroborar.
 - Ya he hecho que only integer funcione. Parece que si tienes FP32 se va a la CPU pero si trabajas en INT8 funciona.
-- he podido ejecutar el tflitefp32 de yolo11n
+- he podido ejecutar el tflitefp32 de yolo11n y con el usb el edgetpu (baja mucho la precisión)
 
 - Ahora tocaría probar a usar dataset personalizado.
 
