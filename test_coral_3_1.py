@@ -4,7 +4,7 @@ import numpy as np
 from tflite_runtime.interpreter import Interpreter, load_delegate
 
 image_path = 'assets/dog.jpg'
-model_path = 'results/mobilenet/tf_saved_model/mobilenet_integer_only_quant.tflite'
+model_path = 'mobilenet_integer_only_quant.tflite'
 labels_path = 'assets/imagenet-simple-labels.txt'
 
 # 1. Cargar el modelo TFLite
