@@ -10,7 +10,7 @@ labels_path = 'assets/imagenet-simple-labels.txt'
 
 # 1. Cargar el modelo TFLite
 start_load_time = time.time()
-interpreter = Interpreter(model_path, experimental_delegates=[load_delegate('libedgetpu.so.1', {'device': 'usb'})])
+interpreter = Interpreter(model_path, experimental_delegates=[load_delegate('libedgetpu.so.1')])
 interpreter.allocate_tensors()
 load_time = time.time() - start_load_time
 
