@@ -1,4 +1,5 @@
 """integer_only"""
+import time
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -7,8 +8,10 @@ image_path = 'assets/dog.jpg'
 model_path='results/mobilenet/tf_saved_model/mobilenet_integer_only_quant.tflite'
 
 # 1. Cargar el modelo TFLite
+start_load_time = time.time()
 interpreter = tf.lite.Interpreter(model_path)
 interpreter.allocate_tensors()
+load_time = time.time() - start_load_time
 
 # 2. Obtener detalles de las entradas y salidas
 input_details = interpreter.get_input_details()
@@ -32,12 +35,11 @@ img_quantized = img_quantized.astype(np.int8)
 batched_img = np.expand_dims(img_quantized, axis=0)
 
 # 5. Realizar la predicción
+start_inference_time = time.time()
 interpreter.set_tensor(input_details[0]['index'], batched_img)
 interpreter.invoke()
 output_data = interpreter.get_tensor(output_details[0]['index'])
-
-# Obtener la salida cuantizada del modelo
-output_data = interpreter.get_tensor(output_details[0]['index'])
+inference_time = time.time() - start_inference_time
 
 # Deshacer la cuantización: aplicar escala y punto cero
 output_float = (output_data - (-128)) * 0.00390625
@@ -62,4 +64,9 @@ probabilidades = softmax(output_float)
 top_5_indices = np.argsort(probabilidades)[-5:][::-1]
 print("\nTop 5 clases con mayor probabilidad:")
 for i in top_5_indices:
-    print(f"Clase {i}: {probabilidades[i]*100}")
+    print(f" · Clase {labels[i]} ({i}): {probabilidades[i] * 100:.2f}%")
+
+# 13. Imprimir tiempos de carga e inferencia
+print(f"\nTiempo de carga del modelo: {load_time:.4f} segundos")
+print(f"Tiempo de inferencia: {inference_time:.4f} segundos")
+print(f"Tiempo total: {load_time+inference_time:.4f} segundos")
