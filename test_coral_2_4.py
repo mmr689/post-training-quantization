@@ -20,3 +20,7 @@ print(load_time)
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 _, height, width, _ = input_details[0]['shape']
+
+# 3. Cargar las etiquetas
+with open(labels_path, 'r') as f:
+    labels = eval(f.read())
