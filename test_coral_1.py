@@ -15,3 +15,8 @@ interpreter.allocate_tensors()
 load_time = time.time() - start_load_time
 
 print(load_time)
+
+# Get model details
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+_, height, width, _ = input_details[0]['shape']
