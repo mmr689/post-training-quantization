@@ -9,9 +9,11 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
 - Genero modelos cuantis de clasificación de TF (tambien h5, pb y tflite).
 - Los ejecuto en server y todo correcto con TF.
 - Los ejecuto en RPi y todo correcto con TFLite-runtime.
-- Los ejecuto en RPi+EdgeTPU y todo correcto. ESTO ES RARO, TODOS LOS MODELOS SE PUEDEN EJECUTAR EN LA EDGE Y NO DEBERÍA.
++ Los ejecuto en RPi+EdgeTPU y todo correcto. ESTO ES RARO, TODOS LOS MODELOS SE PUEDEN EJECUTAR EN LA EDGE Y NO DEBERÍA.
    - En tiempos vemos que cargar le cuesta más con la edge y eso es coherente pero la inferencia creo la hace en la CPU.
-- Probar en la coral dev board para corroborar.
++ Probar en la coral dev board para corroborar.
+- Ya he hecho que only integer funcione. Parece que si tienes FP32 se va a la CPU pero si trabajas en INT8 funciona.
+- Ahora tocaría probar a usar dataset personalizado
 
 
 - `model_quantizer_run_example.py` genera modelos normal, tflite i tflite cuantizados de los modelos clasificadores de imagenet.
