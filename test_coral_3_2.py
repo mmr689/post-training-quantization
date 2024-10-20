@@ -24,13 +24,9 @@ with open(labels_path, 'r') as f:
 # 4.1. Cargar y preprocesar la imagen
 img = cv2.imread(image_path)
 img_resized = cv2.resize(img, (224, 224))
-# img_normalized = img_resized.astype(np.float32) / 255.0  # Normalizar la imagen al rango [0, 1]
-img_quantized = img_resized.astype(np.int8)
-
-# 4.2. Cuantización inversa: aplicar escala y punto cero
-# img_quantized = img_normalized / 0.003921568859368563  # Aplicar la escala (1/255)
-# img_quantized = img_quantized - (-128)  # Aplicar el punto cero
-# img_quantized = img_quantized.astype(np.int8)
+img_quantized = img_resized / 0.003921568859368563  # Aplicar la escala (1/255)
+img_quantized = img_quantized - (-128)  # Aplicar el punto cero
+img_quantized = img_quantized.astype(np.int8)
 
 # 4.3. Añadir la dimensión de lote
 batched_img = np.expand_dims(img_quantized, axis=0)
