@@ -1,86 +1,82 @@
-"""full_integer"""
+"""FP16"""
+
 import cv2
 import numpy as np
 import tensorflow as tf
+import time
 
-image_path = 'assets/dog.jpg'
-model_path='results/mobilenet/tf_saved_model/mobilenet_float16_quant.tflite'
+def run_inference(image_path, model_path, labels_path):
+    # 1. Medir el tiempo de carga del modelo
+    start_load_time = time.time()
+    interpreter = tf.lite.Interpreter(model_path)
+    interpreter.allocate_tensors()
+    load_time = time.time() - start_load_time
 
-# 1. Cargar el modelo TFLite
-interpreter = tf.lite.Interpreter(model_path)
-interpreter.allocate_tensors()
+    # 2. Obtener detalles de las entradas y salidas
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    
+    # 3. Cargar las etiquetas
+    with open(labels_path, 'r') as f:
+        labels = eval(f.read())  # Suponiendo que el archivo tiene una lista de etiquetas
+    
+    # 4. Cargar y preprocesar la imagen
+    img = cv2.imread(image_path)
+    img_resized = cv2.resize(img, (224, 224))  # Cambiar el tamaño según el modelo
+    img_normalized = img_resized.astype(np.float32) / 255.0  # Normalizar entre 0 y 1
+    batched_img = np.expand_dims(img_normalized, axis=0)  # Añadir una dimensión para el batch
+    
+    # 5. Medir el tiempo de inferencia
+    start_inference_time = time.time()
+    interpreter.set_tensor(input_details[0]['index'], batched_img)
+    interpreter.invoke()
+    output_data = interpreter.get_tensor(output_details[0]['index'])
+    inference_time = time.time() - start_inference_time
+    
+    # 7. Calcular probabilidades con NumPy
+    output_data = output_data[0]  # Acceder a la primera dimensión si es un batch
+    exp_scores = np.exp(output_data - np.max(output_data))  # Estabilidad numérica
+    probabilidades_np = exp_scores / np.sum(exp_scores)
+    
+    # Obtener las 5 probabilidades más altas y sus índices
+    top_5_indices_np = np.argsort(probabilidades_np)[::-1][:5]
+    top_5_probabilidades_np = probabilidades_np[top_5_indices_np]
+    
+    # Mostrar las 5 etiquetas con las mayores probabilidades usando NumPy
+    print("\nResultados con NumPy:")
+    for i, idx in enumerate(top_5_indices_np):
+        certainty_percentage_np = top_5_probabilidades_np[i] * 100
+        print(f" · Clase {labels[idx]} ({idx}) con un {certainty_percentage_np:.2f}% de certeza.")
+    
+    # 8. Imprimir tiempos
+    print(f"\nTiempo de carga del modelo: {load_time:.4f} segundos")
+    print(f"Tiempo de inferencia: {inference_time:.4f} segundos")
+    print(f"Tiempo total: {load_time + inference_time:.4f} segundos")
 
-# 2. Obtener detalles de las entradas y salidas
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
+    return load_time, inference_time
 
-# 3. Cargar las etiquetas
-with open('assets/imagenet-simple-labels.txt', 'r') as f:
-    labels = eval(f.read())  # Suponiendo que tu archivo tiene una lista de etiquetas como el ejemplo que diste
 
-# 4.1. Cargar y preprocesar la imagen
-img = cv2.imread(image_path)
-img_resized = cv2.resize(img, (224, 224))
-img_normalized = img_resized.astype(np.float32) / 255
-batched_img = np.expand_dims(img_normalized, axis=0)
+if __name__ == "__main__":
+    image_path = 'assets/dog.jpg'  # Ruta de la imagen
+    model_path = 'results/vgg16_imagenet-default/vgg16_float16_quant.tflite'  # Ruta del modelo TFLite
+    labels_path = 'assets/imagenet-simple-labels.txt'  # Ruta de las etiquetas
 
-# 5. Realizar la predicción
-interpreter.set_tensor(input_details[0]['index'], batched_img)
-interpreter.invoke()
-output_data = interpreter.get_tensor(output_details[0]['index'])
+    total_load_time = 0
+    total_inference_time = 0
+    iterations = 5  # Definir cuántas veces ejecutar la inferencia
 
-# Si es una tarea de clasificación, aplicamos softmax para convertir los logits a probabilidades
-probabilidades = tf.nn.softmax(output_data)
+    # Ejecutar el bucle {iterations} veces
+    for i in range(iterations):
+        print(f"\nEjecución {i + 1}:\n")
+        load_time, inference_time = run_inference(image_path, model_path, labels_path)
+        total_load_time += load_time
+        total_inference_time += inference_time
 
-# Obtener las 5 probabilidades más altas y sus índices
-top_5_indices = np.argsort(probabilidades[0])[::-1][:5]
-top_5_probabilidades = tf.gather(probabilidades[0], top_5_indices)
+    # Calcular el promedio
+    avg_load_time = total_load_time / iterations
+    avg_inference_time = total_inference_time / iterations
 
-# Mostrar las 5 etiquetas con las mayores probabilidades
-for i, idx in enumerate(top_5_indices):
-    print(f" * Clase {idx}: {top_5_probabilidades[i] * 100:.2f}%")
-
-# Calcular probabilidades con NumPy
-output_data = output_data[0]  # Acceder a la primera dimensión si es un batch
-exp_scores = np.exp(output_data - np.max(output_data))  # Resta la máxima para estabilidad numérica
-probabilidades = exp_scores / np.sum(exp_scores)
-
-# Obtener las 5 probabilidades más altas y sus índices
-top_5_indices = np.argsort(probabilidades)[::-1][:5]
-top_5_probabilidades = probabilidades[top_5_indices]
-
-# Mostrar las 5 etiquetas con las mayores probabilidades
-for i, idx in enumerate(top_5_indices):
-    print(f" · Clase {labels[idx]} ({idx}): {top_5_probabilidades[i] * 100:.2f}%")
-    print(f" - Clase {idx}: {top_5_probabilidades[i] * 100:.2f}%")
-"""
-********
-"""
- 
-# # Obtener la salida cuantizada del modelo
-# output_data = interpreter.get_tensor(output_details[0]['index'])
-
-# # Deshacer la cuantización: aplicar escala y punto cero
-# output_float = (output_data - (-128)) * 0.00390625
-
-# # Como la forma de la salida es (1, 1000), eliminamos la dimensión de lote
-# output_float = np.squeeze(output_float)
-
-# # Imprimir las 5 clases con mayor puntaje (logit)
-# top_5_indices = np.argsort(output_float)[-5:][::-1]
-# print("\nTop 5 clases con mayor puntaje:")
-# for i in top_5_indices:
-#     print(f"Clase {labels[i]} ({i}): {output_float[i]}")
-
-# # Aplicar softmax para convertir puntajes en probabilidades
-# def softmax(x):
-#     exp_x = np.exp(x - np.max(x))  # Estabilidad numérica
-#     return exp_x / np.sum(exp_x)
-
-# # Aplicar softmax a la salida float
-# probabilidades = softmax(output_float)
-# # Imprimir las 5 clases con mayor probabilidad
-# top_5_indices = np.argsort(probabilidades)[-5:][::-1]
-# print("\nTop 5 clases con mayor probabilidad:")
-# for i in top_5_indices:
-#     print(f"Clase {i}: {probabilidades[i]*100}")
+    # Imprimir los tiempos promedios
+    print(f"\nPromedio de tiempo de carga del modelo: {avg_load_time:.4f} segundos")
+    print(f"Promedio de tiempo de inferencia: {avg_inference_time:.4f} segundos")
+    print(f"Promedio de tiempo total: {avg_load_time + avg_inference_time:.4f} segundos")
