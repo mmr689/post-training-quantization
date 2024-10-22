@@ -1,14 +1,3 @@
-"""
-This script aims to download a pre-trained model (VGG16, MobileNet, or ResNet50) with ImageNet weights, save it in TensorFlow SavedModel format, and then apply various quantization techniques to optimize the model for deployment on resource-constrained devices. The quantization techniques applied include:
-
-1. Dynamic Range Quantization.
-2. Float16 Quantization.
-3. Integer-Only Quantization using a representative dataset.
-4. Full Integer Quantization with a representative dataset.
-
-Each quantized model is saved in `.tflite` format for use on TensorFlow Lite devices. You can select the model you want to use by changing the `model_name` variable in the code.
-"""
-
 import os
 import tensorflow as tf
 from utils.model_quantizer import ModelQuantizer
@@ -24,52 +13,77 @@ def load_model(model_name):
     else:
         raise ValueError("Unsupported model name. Please choose 'vgg16', 'mobilenet', or 'resnet'.")
 
-# Choose the model name
-model_name = 'vgg16'  # Change this to 'mobilenet' or 'resnet' to use other models
+# Function to create directory if not exists
+def create_directory(path):
+    print(path)
+    os.makedirs(path, exist_ok=True)
+    print(f"Directory '{path}' created successfully.")
 
-# Load the chosen model
-model = load_model(model_name)
+# Function to save model in different formats
+def save_model_formats(model, model_name, model_dir):
+    # Save in HDF5 format
+    h5_model_path = os.path.join(model_dir, "{}.h5".format(model_name))
+    model.save(h5_model_path)
+    print(f"\n · Model saved in HDF5 format: {h5_model_path}")
+    
+    # Save in TensorFlow SavedModel format
+    saved_model_path = os.path.join(model_dir, "tf_saved_model")
+    tf.saved_model.save(model, saved_model_path)
+    print(f"\n · Model saved in TensorFlow SavedModel format: {saved_model_path}\n")
+    
+    return saved_model_path
 
-# Define and create the model directory if it doesn't exist
-model_dir = os.path.join("results", model_name)
-os.makedirs(model_dir, exist_ok=True)
+# Function to convert model to TFLite without quantization
+def convert_to_tflite(model, model_dir, model_name):
+    tflite_model = tf.lite.TFLiteConverter.from_keras_model(model).convert()
+    tflite_model_path = os.path.join(model_dir, "{}.tflite".format(model_name))
+    with open(tflite_model_path, 'wb') as f:
+        f.write(tflite_model)
+    print(f"\n · Model saved in TFLite format: {tflite_model_path}\n")
 
-# Save the model in HDF5 format
-h5_model_path = os.path.join(model_dir, "{}.h5".format(model_name))
-model.save(h5_model_path)
+# Function to apply different quantization methods and save them
+def apply_quantization(quantizer, model_name, saved_model_path, repr_dataset_path):
+    # Dynamic Range Quantization
+    dynamic_quant_model = quantizer.quantize_dynamic_range()
+    quantizer.save_quantized_model(dynamic_quant_model, os.path.join(saved_model_path, f'{model_name}_dynamic_quant.tflite'))
 
-# Convert the model to TFLite format without quantization
-tflite_model = tf.lite.TFLiteConverter.from_keras_model(model).convert()
-tflite_model_path = os.path.join(model_dir, "{}.tflite".format(model_name))
-with open(tflite_model_path, 'wb') as f:
-    f.write(tflite_model)
+    # Float16 Quantization
+    float16_quant_model = quantizer.quantize_float16()
+    quantizer.save_quantized_model(float16_quant_model, os.path.join(saved_model_path, f'{model_name}_float16_quant.tflite'))
 
-# Save the model in TensorFlow SavedModel format
-saved_model_path = os.path.join(model_dir, "tf_saved_model")
-tf.saved_model.save(model, saved_model_path)
+    # Integer-Only Quantization
+    integer_only_quant_model = quantizer.quantize_integer_only(repr_dataset_path, (224, 224))
+    quantizer.save_quantized_model(integer_only_quant_model, os.path.join(saved_model_path, f'{model_name}_integer_only_quant.tflite'))
 
-# Initialize the quantizer with the saved model path
-quantizer = ModelQuantizer(saved_model_path)
+    # Full Integer Quantization
+    full_integer_quant_model = quantizer.quantize_full_integer(repr_dataset_path, (224, 224))
+    quantizer.save_quantized_model(full_integer_quant_model, os.path.join(saved_model_path, f'{model_name}_full_integer_quant.tflite'))
 
-# Path to the representative dataset
-repr_dataset_path = '/home/qcienmed/mmr689/quantization/val2017'
+# Main function to run the process
+def main(model_name, results_dir, repr_dataset_path):
+    # Load the model
+    model = load_model(model_name)
+    
+    # Define and create the model directory if it doesn't exist
+    create_directory(results_dir)
 
-# Function to load representative data
-def representative_data_gen():
-    return quantizer.representative_dataset(repr_dataset_path, size=(224, 224))
+    # Save the model in different formats
+    saved_model_path = save_model_formats(model, model_name, results_dir)
 
-# Apply dynamic range quantization
-dynamic_quant_model = quantizer.quantize_dynamic_range()
-quantizer.save_quantized_model(dynamic_quant_model, os.path.join(saved_model_path, '{}_dynamic_quant.tflite'.format(model_name)))
+    # Convert the model to TFLite format without quantization
+    convert_to_tflite(model, results_dir, model_name)
 
-# Apply float16 quantization
-float16_quant_model = quantizer.quantize_float16()
-quantizer.save_quantized_model(float16_quant_model, os.path.join(saved_model_path, '{}_float16_quant.tflite'.format(model_name)))
+    # Initialize the quantizer with the saved model path
+    quantizer = ModelQuantizer(saved_model_path)
 
-# Apply integer only quantization
-integer_only_quant_model = quantizer.quantize_integer_only(repr_dataset_path, (224, 224))
-quantizer.save_quantized_model(integer_only_quant_model, os.path.join(saved_model_path, '{}_integer_only_quant.tflite'.format(model_name)))
+    # Apply different quantization methods and save them
+    apply_quantization(quantizer, model_name, results_dir, repr_dataset_path)
 
-# Apply full integer quantization
-full_integer_quant_model = quantizer.quantize_full_integer(repr_dataset_path, (224, 224))
-quantizer.save_quantized_model(full_integer_quant_model, os.path.join(saved_model_path, '{}_full_integer_quant.tflite'.format(model_name)))
+# User inputs
+if __name__ == "__main__":
+    model_name = 'mobilenet'  # Change this to 'mobilenet' or 'resnet' as needed
+    results_dir = f"results/{model_name}_imagenet-default"  # Define the directory to save the results
+    repr_dataset_path = 'data/val2017'  # Path to representative dataset
+
+    # Run the process
+    main(model_name, results_dir, repr_dataset_path)
