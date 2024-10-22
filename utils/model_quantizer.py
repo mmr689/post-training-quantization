@@ -65,4 +65,4 @@ class ModelQuantizer:
         """Save the quantized TFLite model to the specified output path."""
         with open(output_path, 'wb') as f:
             f.write(tflite_model)
-        print(f"Quantized model saved to {output_path}")
+        print(f"\n · Quantized model saved to {output_path}\n")
