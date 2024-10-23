@@ -14,3 +14,6 @@ results/yolov8_imagenet-default/
 results/yolov8_trap-colour-insects/
 results/yolov11_imagenet-default/
 results/yolov11_trap-colour-insects/
+
+coco/
+bioview/
