@@ -43,14 +43,14 @@ copy_images_to_temp_folder("data/trap-colour-insects-dataset/validation.txt", im
 # Load a model
 model = YOLO("results/yolov8_trap-colour-insects/yolov8n-cls.pt")
 # Train the model
-model = model.train(data=output_folder, epochs=5)
+result = model.train(data=output_folder, epochs=5)
 # Export the model
 model.export(format="edgetpu")
 
 
 # Borrar la carpeta de salida
-try:
-    shutil.rmtree(output_folder)
-    print(f"La carpeta '{output_folder}' ha sido eliminada.")
-except Exception as e:
-    print(f"Error al intentar eliminar la carpeta '{output_folder}': {e}")
+# try:
+#     shutil.rmtree(output_folder)
+#     print(f"La carpeta '{output_folder}' ha sido eliminada.")
+# except Exception as e:
+#     print(f"Error al intentar eliminar la carpeta '{output_folder}': {e}")
