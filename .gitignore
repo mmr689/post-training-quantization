@@ -2,4 +2,15 @@ data/
 
 .venv/
 
-results/
+# results/
+results/mobilenet_imagenet-default/tf_saved_model/
+results/mobilenet_imagenet-default/mobilenet.h5
+results/mobilenet_trap-colour-insects/
+results/resnet_imagenet-default/
+results/resnet_trap-colour-insects/
+results/vgg16_imagenet-default/
+results/vgg16_trap-colour-insects/
+results/yolov8_imagenet-default/
+results/yolov8_trap-colour-insects/
+results/yolov11_imagenet-default/
+results/yolov11_trap-colour-insects/
