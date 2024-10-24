@@ -9,17 +9,19 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
 from utils.model_quantizer import ModelQuantizer
 
 # Parámetros
-MODEL_NAME = 'mobilenet'  # Cambia a 'mobilenet' o 'resnet' si es necesario
+MODEL_NAME = 'mobilenetv2'  # Cambia a 'mobilenet' o 'resnet' si es necesario
 IMG_SIZE = (224, 224)  # Tamaño de las imágenes
 BATCH_SIZE = 32
-EPOCHS = 2  # Número de épocas
+EPOCHS = 1000  # Número de épocas
+PATIENCE = 50
 LEARNING_RATE = 0.0001  # Tasa de aprendizaje
-DATA_DIR = "data"
-TRAIN_TXT_PATH = "data/train.txt"
-VAL_TXT_PATH = "data/validation.txt"
+DATA_DIR = "data/trap-colour-insects-dataset"
+TRAIN_TXT_PATH = "data/trap-colour-insects-dataset/train.txt"
+VAL_TXT_PATH = "data/trap-colour-insects-dataset/validation.txt"
 LABELS = ['rice_weevil', 'red_flour_beetle']  # Ajusta las etiquetas según tu dataset
 OUTPUT_DIR = f"results/{MODEL_NAME}_trap-colour-insects"
 
@@ -64,7 +66,7 @@ def load_pretrained_model(model_name, input_shape):
     Carga un modelo preentrenado según el nombre especificado.
     
     Args:
-    model_name (str): Nombre del modelo ('vgg16', 'mobilenet', 'resnet').
+    model_name (str): Nombre del modelo ('vgg16', 'mobilenet', 'mobilenetV2', 'mobilenetV3Small', 'resnet').
     input_shape (tuple): Forma de las imágenes de entrada.
 
     Returns:
@@ -73,7 +75,11 @@ def load_pretrained_model(model_name, input_shape):
     if model_name == 'vgg16':
         return tf.keras.applications.VGG16(weights='imagenet', include_top=False, input_shape=input_shape)
     elif model_name == 'mobilenet':
+        return tf.keras.applications.MobileNet(weights='imagenet', include_top=False, input_shape=input_shape)
+    elif model_name == 'mobilenetv2':
         return tf.keras.applications.MobileNetV2(weights='imagenet', include_top=False, input_shape=input_shape)
+    elif model_name == 'mobilenetv3':
+        return tf.keras.applications.MobileNetV3Small(weights='imagenet', include_top=False, input_shape=input_shape)
     elif model_name == 'resnet':
         return tf.keras.applications.ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
     else:
@@ -193,7 +199,15 @@ base_model = load_pretrained_model(MODEL_NAME, (IMG_SIZE[0], IMG_SIZE[1], 3))
 
 # Construir y entrenar el modelo
 model = build_model(base_model, num_classes=len(LABELS))
-history = model.fit(x_train, y_train, validation_data=(x_val, y_val), batch_size=BATCH_SIZE, epochs=EPOCHS)
+# Crear la callback de EarlyStopping
+early_stopping = EarlyStopping(monitor='val_loss', patience=PATIENCE, restore_best_weights=True)
+history = model.fit(
+    x_train, y_train,
+    validation_data=(x_val, y_val),
+    batch_size=BATCH_SIZE,
+    epochs=EPOCHS,
+    callbacks=[early_stopping]  # Añadir EarlyStopping aquí
+)
 
 # Guardar métricas y gráficos
 save_metrics(history, OUTPUT_DIR)
