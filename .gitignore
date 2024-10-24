@@ -17,3 +17,7 @@ results/yolov11_trap-colour-insects/
 
 coco/
 bioview/
+
+
+results/mobilenetv2_trap-colour-insects/mobilenetv2_reentrenado.h5
+results/mobilenetv2_trap-colour-insects/saved_model
