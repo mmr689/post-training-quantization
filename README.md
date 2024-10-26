@@ -22,13 +22,20 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
 
 - ✔️ Cuantizar modelos default tensorflow
 - ✔️ Cuantizar específicamente para EdgeTPU
-- ✔️ Cuantizar modelos bio tensorflow
-- ✔️ Cuantizar específicamente para EdgeTPU bio
+- ✔️ Colour-insects tensorflow
+   - ✔️ Cuantizar
+   - ✔️ Test general
+   - ✔️ Test edge
+   - ✔️ Métricas modelo
+   - ✔️ Medir tiempo carga modelo
+   - ✔️ Medir tiempo inferencia. Fijarnos en la primera imagen si tarda más
+   - Medir CPU y memoria
+   - Medir consumos
 - Cuantizar modelo imagenet (default) yolo-cls ultralytics
    - ✔️ Cuantizar
    - Test general
    - Test edge
-- Cuantizar modelo bio yolo-cls ultralytics
+- Cuantizar modelo color-insects yolo-cls ultralytics
    - Cuantizar
    - Test general
    - Test edge
