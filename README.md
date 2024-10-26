@@ -94,6 +94,8 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
     </tbody>
 </table>
 
+- Dockerizar proyecto (quizás puedo usar el de ultralytics, incluso puede tener el propio dataset dento)
+
 ---
 
 - `model_quantizer_run_example.py` genera modelos normal, tflite i tflite cuantizados de los modelos clasificadores de imagenet.
