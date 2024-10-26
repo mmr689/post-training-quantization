@@ -20,19 +20,79 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
 
 # ToDo list
 
-- ✔️ Cuantizar modelos default tensorflow
-- ✔️ Cuantizar específicamente para EdgeTPU
-- ✔️ Cuantizar modelos bio tensorflow
-- ✔️ Cuantizar específicamente para EdgeTPU bio
-- Cuantizar modelo imagenet (default) yolo-cls ultralytics
-   - ✔️ Cuantizar
-   - Test general
-   - Test edge
-- Cuantizar modelo bio yolo-cls ultralytics
-   - Cuantizar
-   - Test general
-   - Test edge
-   - Añadir validación a la hora de crear el modelo
+<table border="1" cellpadding="10">
+    <thead>
+        <tr>
+            <th rowspan="2">Tarea</th>
+            <th colspan="2" style="text-align: center;">Imagenet</th>
+            <th colspan="2" style="text-align: center;">Colour-insects</th>
+        </tr>
+        <tr>
+            <th style="text-align: center;">MobileNet v2</th>
+            <th style="text-align: center;">YOLO-CLS v8n</th>
+            <th style="text-align: center;">MobileNet v2</th>
+            <th style="text-align: center;">YOLO v8n</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Cuantizar</td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
+            <td style="text-align: center;"></td>
+        </tr>
+        <tr>
+            <td>Test general</td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
+            <td style="text-align: center;"></td>
+        </tr>
+        <tr>
+            <td>Test edge</td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
+            <td style="text-align: center;"></td>
+        </tr>
+        <tr>
+            <td>Métricas modelo</td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
+            <td style="text-align: center;"></td>
+        </tr>
+        <tr>
+            <td>Medir tiempo carga modelo</td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
+            <td style="text-align: center;"></td>
+        </tr>
+        <tr>
+            <td>Medir tiempo inferencia (primera imagen)</td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
+            <td style="text-align: center;"></td>
+        </tr>
+        <tr>
+            <td>Medir CPU y memoria</td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+        </tr>
+        <tr>
+            <td>Medir consumos</td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+            <td style="text-align: center;"></td>
+        </tr>
+    </tbody>
+</table>
 
 ---
 
