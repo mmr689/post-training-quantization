@@ -24,7 +24,7 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
     <thead>
         <tr>
             <th rowspan="2">Tarea</th>
-            <th colspan="2" style="text-align: center;">Imagenet</th>
+            <th colspan="2" style="text-align: center;">ImageNet</th>
             <th colspan="2" style="text-align: center;">Colour-insects</th>
         </tr>
         <tr>
