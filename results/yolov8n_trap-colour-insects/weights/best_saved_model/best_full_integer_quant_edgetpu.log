@@ -1,0 +1,16 @@
+Edge TPU Compiler version 16.0.384591198
+Input: /ultralytics/runs/classify/train/weights/best_saved_model/best_full_integer_quant.tflite
+Output: /ultralytics/runs/classify/train/weights/best_saved_model/best_full_integer_quant_edgetpu.tflite
+
+Operator                       Count      Status
+
+STRIDED_SLICE                  8          Mapped to Edge TPU
+SOFTMAX                        1          Mapped to Edge TPU
+MEAN                           1          Mapped to Edge TPU
+PAD                            5          Mapped to Edge TPU
+CONCATENATION                  4          Mapped to Edge TPU
+LOGISTIC                       26         Mapped to Edge TPU
+ADD                            6          Mapped to Edge TPU
+FULLY_CONNECTED                1          Mapped to Edge TPU
+CONV_2D                        26         Mapped to Edge TPU
+MUL                            26         Mapped to Edge TPU
