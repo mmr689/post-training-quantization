@@ -20,9 +20,9 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
 
 # ToDo list
 
-- ✔️ Cuantizar modelos default tensorflow
-- ✔️ Cuantizar específicamente para EdgeTPU
-- ✔️ Colour-insects tensorflow
+- Cuantizar modelos default tensorflow
+- Cuantizar específicamente para EdgeTPU
+- Colour-insects tensorflow
    - ✔️ Cuantizar
    - ✔️ Test general
    - ✔️ Test edge
