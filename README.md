@@ -20,7 +20,6 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
 
 # ToDo list
 
-<<<<<<< HEAD
 <table border="1" cellpadding="10">
     <thead>
         <tr>
@@ -94,28 +93,6 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
         </tr>
     </tbody>
 </table>
-=======
-- Cuantizar modelos default tensorflow
-- Cuantizar específicamente para EdgeTPU
-- Colour-insects tensorflow
-   - ✔️ Cuantizar
-   - ✔️ Test general
-   - ✔️ Test edge
-   - ✔️ Métricas modelo
-   - ✔️ Medir tiempo carga modelo
-   - ✔️ Medir tiempo inferencia. Fijarnos en la primera imagen si tarda más
-   - Medir CPU y memoria
-   - Medir consumos
-- Cuantizar modelo imagenet (default) yolo-cls ultralytics
-   - ✔️ Cuantizar
-   - Test general
-   - Test edge
-- Cuantizar modelo color-insects yolo-cls ultralytics
-   - Cuantizar
-   - Test general
-   - Test edge
-   - Añadir validación a la hora de crear el modelo
->>>>>>> 04dd40db41831850aa701035a3c2aa8ab58f9e5d
 
 ---
 
