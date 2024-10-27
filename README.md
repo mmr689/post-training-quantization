@@ -31,7 +31,7 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
             <th style="text-align: center;">MobileNet v2</th>
             <th style="text-align: center;">YOLO-CLS v8n</th>
             <th style="text-align: center;">MobileNet v2</th>
-            <th style="text-align: center;">YOLO v8n</th>
+            <th style="text-align: center;">YOLO-CLS v8n</th>
         </tr>
     </thead>
     <tbody>
