@@ -31,7 +31,7 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
             <th style="text-align: center;">MobileNet v2</th>
             <th style="text-align: center;">YOLO-CLS v8n</th>
             <th style="text-align: center;">MobileNet v2</th>
-            <th style="text-align: center;">YOLO v8n</th>
+            <th style="text-align: center;">YOLO-CLS v8n</th>
         </tr>
     </thead>
     <tbody>
@@ -40,42 +40,42 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Test general</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Test edge</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Métricas modelo</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Medir tiempo carga modelo</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Medir tiempo inferencia (primera imagen)</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Medir CPU y memoria</td>
@@ -95,6 +95,8 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
 </table>
 
 - Dockerizar proyecto (quizás puedo usar el de ultralytics, incluso puede tener el propio dataset dento)
+- Averiguar que es cada modelo de Tensorflow
+- Averiguar que es cada modelo Ultralytics
 
 ---
 
