@@ -40,42 +40,42 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Test general</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Test edge</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Métricas modelo</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Medir tiempo carga modelo</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Medir tiempo inferencia (primera imagen)</td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;"></td>
             <td style="text-align: center;">✔️</td>
-            <td style="text-align: center;"></td>
+            <td style="text-align: center;">✔️</td>
         </tr>
         <tr>
             <td>Medir CPU y memoria</td>
