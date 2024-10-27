@@ -95,6 +95,8 @@ The aim of this repository is to learn and understand how [Tensorflow post-train
 </table>
 
 - Dockerizar proyecto (quizás puedo usar el de ultralytics, incluso puede tener el propio dataset dento)
+- Averiguar que es cada modelo de Tensorflow
+- Averiguar que es cada modelo Ultralytics
 
 ---
 
