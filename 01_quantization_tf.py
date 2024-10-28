@@ -3,15 +3,19 @@ import tensorflow as tf
 from utils.model_quantizer import ModelQuantizer
 
 # Function to load a pre-trained model based on user choice
-def load_model(model_name):
+def load_model(model_name, input_shape= (224, 224, 3)):
     if model_name == 'vgg16':
-        return tf.keras.applications.VGG16(weights='imagenet')
+        return tf.keras.applications.VGG16(weights='imagenet', include_top=False, input_shape=input_shape)
     elif model_name == 'mobilenet':
-        return tf.keras.applications.MobileNetV2(weights='imagenet')
+        return tf.keras.applications.MobileNet(weights='imagenet', include_top=False, input_shape=input_shape)
+    elif model_name == 'mobilenetv2':
+        return tf.keras.applications.MobileNetV2(weights='imagenet', include_top=False, input_shape=input_shape)
+    elif model_name == 'mobilenetv3':
+        return tf.keras.applications.MobileNetV3Small(weights='imagenet', include_top=False, input_shape=input_shape)
     elif model_name == 'resnet':
-        return tf.keras.applications.ResNet50(weights='imagenet')
+        return tf.keras.applications.ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
     else:
-        raise ValueError("Unsupported model name. Please choose 'vgg16', 'mobilenet', or 'resnet'.")
+        raise ValueError("Modelo no soportado. Usa 'vgg16', 'mobilenet' o 'resnet'.")
 
 # Function to create directory if not exists
 def create_directory(path):
@@ -81,9 +85,9 @@ def main(model_name, results_dir, repr_dataset_path):
 
 # User inputs
 if __name__ == "__main__":
-    model_name = 'mobilenet'  # Change this to 'mobilenet' or 'resnet' as needed
+    model_name = 'mobilenetv2'  # Change this to 'mobilenet' or 'resnet' as needed
     results_dir = f"results/{model_name}_imagenet-default"  # Define the directory to save the results
-    repr_dataset_path = 'data/val2017'  # Path to representative dataset
+    repr_dataset_path = 'data/'  # Path to representative dataset
 
     # Run the process
     main(model_name, results_dir, repr_dataset_path)
