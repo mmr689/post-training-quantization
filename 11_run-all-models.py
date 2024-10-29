@@ -37,6 +37,7 @@ def run_inference_fp32Quant(image_path, interpreter, n_probs=5):
     interpreter.set_tensor(input_index, batched_img)
     interpreter.invoke()
     output_data = interpreter.get_tensor(output_index)
+    print(output_data.shape)
     inference_time = time.time() - start_inference_time
 
     # 6. Calcular probabilidades con NumPy
@@ -99,12 +100,12 @@ def run_inference_Int8Quant(image_path, interpreter, n_probs=5):
     return inference_time, [top_5_indices, top_5_probs]
 
 if __name__ == "__main__":
-    main_path = 'results/yolov8n_trap-colour-insects'
+    main_path = 'results/mobilenetv2_imagenet-default'
     labels_path = os.path.join(main_path, 'labels.txt')  # Ruta de las etiquetas
-    path_base = 'data/trap-colour-insects-dataset' # Define el path base imágenes validación
+    path_base = 'data/imagenet_val' # Define el path base imágenes validación
 
     # Lee el archivo de validación
-    with open('data/trap-colour-insects-dataset/validation.txt', 'r') as f:
+    with open(os.path.join(path_base, 'validation.txt'), 'r') as f:
         rutas_relativas = [line.strip() for line in f]
     # Genera la lista final uniendo el path base con las rutas relativas
     images_paths = [os.path.join(path_base, ruta) for ruta in rutas_relativas]
@@ -117,7 +118,8 @@ if __name__ == "__main__":
     # ********************************* #
     #           Dinamic QUANT           #
     # ********************************* #
-    model_name = 'best_float32'
+    # model_name = 'best_float32'
+    model_name = 'mobilenetv2_dynamic_quant'
     model_path = os.path.join(main_path, f'{model_name}.tflite')  # Ruta del modelo TFLite
     interpreter, load_time = load_model(model_path)
     metrics = {'load time': load_time}
@@ -137,7 +139,8 @@ if __name__ == "__main__":
     # ********************************* #
     #           FP16 Quant              #
     # ********************************* #
-    model_name = 'best_float16'
+    # model_name = 'best_float16'
+    model_name = 'mobilenetv2_float16_quant'
     model_path = os.path.join(main_path, f'{model_name}.tflite')  # Ruta del modelo TFLite
     interpreter, load_time = load_model(model_path)
     metrics = {'load time': load_time}
@@ -157,7 +160,8 @@ if __name__ == "__main__":
     # ********************************* #
     #         Full INT Quant            #
     # ********************************* #
-    model_name = 'best_full_integer_quant'
+    # model_name = 'best_full_integer_quant'
+    model_name = 'mobilenetv2_full_integer_quant'
     model_path = os.path.join(main_path, f'{model_name}.tflite')  # Ruta del modelo TFLite
     interpreter, load_time = load_model(model_path)
     metrics = {'load time': load_time}
@@ -177,19 +181,20 @@ if __name__ == "__main__":
     # # ********************************* #
     # #         INT Only Quant            #
     # # ********************************* #
-    # model_name = 'best_full_integer_quant_edgetpu'
-    # model_path = os.path.join(main_path, f'{model_name}.tflite')  # Ruta del modelo TFLite
-    # interpreter, load_time = load_model(model_path)
-    # metrics = {'load time': load_time}
-    # for cnt, image_path in enumerate(images_paths):
-    #     inference_time, results = run_inference_Int8Quant(image_path, interpreter)
-    #     metrics[cnt] = {
-    #         'image name': image_path.split('/')[-1],
-    #         'label name': image_path.split('/')[-2],
-    #         'inference time': inference_time,
-    #         'inference ids': results[0].tolist(),
-    #         'inference probs': results[1].tolist()
-    #         }
+    # model_name = None
+    model_name = 'mobilenetv2_integer_only_quant'
+    model_path = os.path.join(main_path, f'{model_name}.tflite')  # Ruta del modelo TFLite
+    interpreter, load_time = load_model(model_path)
+    metrics = {'load time': load_time}
+    for cnt, image_path in enumerate(images_paths):
+        inference_time, results = run_inference_Int8Quant(image_path, interpreter)
+        metrics[cnt] = {
+            'image name': image_path.split('/')[-1],
+            'label name': image_path.split('/')[-2],
+            'inference time': inference_time,
+            'inference ids': results[0].tolist(),
+            'inference probs': results[1].tolist()
+            }
     
-    # # Guardar el diccionario en un archivo JSON
-    # json.dump(metrics, open(os.path.join(main_path, f'{model_name}_inference_metrics.json'), 'w'), indent=4)
+    # Guardar el diccionario en un archivo JSON
+    json.dump(metrics, open(os.path.join(main_path, f'{model_name}_inference_metrics.json'), 'w'), indent=4)
